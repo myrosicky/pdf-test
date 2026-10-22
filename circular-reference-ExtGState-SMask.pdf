@@ -1,0 +1,73 @@
+%PDF-1.7
+1 0 obj << /Type /Catalog /Pages 2 0 R >> endobj
+2 0 obj << /Type /Pages /Kids [3 0 R] /Count 1 >> endobj
+3 0 obj
+<<
+/Type /Page
+/MediaBox [0 0 400 400]
+/Resources <<
+  /ExtGState << /GS0 4 0 R >>
+>>
+/Contents 100 0 R
+>>
+endobj
+
+% GS0 → SMask Mask0 (obj5)
+4 0 obj << /Type /ExtGState /SMask 5 0 R /CA 1 >> endobj
+% Mask0 Form，资源带GS1
+5 0 obj
+<<
+/Type /XObject /Subtype /Form /BBox [0 0 100 100]
+/Resources << /ExtGState << /GS1 6 0 R >> >>
+/Contents << /Length 4 >> stream 0 g endstream endobj
+>>
+endobj
+
+% GS1 → SMask Mask1 (obj7)
+6 0 obj << /Type /ExtGState /SMask 7 0 R /CA 1 >> endobj
+% Mask1 Form，资源带GS2
+7 0 obj
+<<
+/Type /XObject /Subtype /Form /BBox [0 0 100 100]
+/Resources << /ExtGState << /GS2 8 0 R >> >>
+/Contents << /Length 4 >> stream 0 g endstream endobj
+>>
+endobj
+
+% GS2 → SMask Mask2 (obj9)
+8 0 obj << /Type /ExtGState /SMask 9 0 R /CA 1 >> endobj
+% Mask2 Form，资源回到GS0(obj4)，闭环！
+9 0 obj
+<<
+/Type /XObject /Subtype /Form /BBox [0 0 100 100]
+/Resources << /ExtGState << /GS0 4 0 R >> >>
+/Contents << /Length 4 >> stream 0 g endstream endobj
+>>
+endobj
+
+% 页面内容：启用GS0，画矩形触发蒙版解析
+100 0 obj
+<< /Length 12 >>
+stream
+/GS0 gs
+0 0 100 100 re f
+endstream
+endobj
+
+xref
+0 101
+0000000000 65535 f
+0000000010 00000 n
+0000000075 00000 n
+0000000145 00000 n
+0000000270 00000 n
+0000000360 00000 n
+0000000480 00000 n
+0000000570 00000 n
+0000000690 00000 n
+0000000780 00000 n
+0000000900 00000 n
+trailer << /Size 101 /Root 1 0 R >>
+startxref
+980
+%%EOF

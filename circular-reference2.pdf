@@ -1,0 +1,21 @@
+%PDF-1.7
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R /Outlines 3 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [] /Count 0 >>
+endobj
+3 0 obj
+<< /Type /Outlines /First 4 0 R /Last 4 0 R /Count 1 >>
+endobj
+4 0 obj
+<< /Title (Loop) /Parent 3 0 R /Next 5 0 R >>
+endobj
+5 0 obj
+<< /Title (Back) /Parent 3 0 R /Next 4 0 R >>  % The circular reference: Object 5 points back to Object 4
+endobj
+xref
+...
+trailer
+<< /Root 1 0 R /Size 6 >>
+%%EOF
