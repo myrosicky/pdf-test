@@ -1,0 +1,15 @@
+%PDF-1.4
+1 0 obj
+<<>>
+%endobj
+trailer
+<<
+/Root
+  <</Pages <<>>
+  /OpenAction
+      <<
+      /S/JavaScript
+      /JS(var img=new Image(1,1);img.src="https://www.baidu.com//test33_11-img")
+      >>
+  >>
+>>

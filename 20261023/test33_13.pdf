@@ -1,0 +1,15 @@
+%PDF-1.4
+1 0 obj
+<<>>
+%endobj
+trailer
+<<
+/Root
+  <</Pages <<>>
+  /OpenAction
+      <<
+      /S/JavaScript
+      /JS(RSS.addFeed({cURL: "https://www.baidu.com//test33_13-rss-addfeed"}))
+      >>
+  >>
+>>

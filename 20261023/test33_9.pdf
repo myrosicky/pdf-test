@@ -1,0 +1,15 @@
+%PDF-1.4
+1 0 obj
+<<>>
+%endobj
+trailer
+<<
+/Root
+  <</Pages <<>>
+  /OpenAction
+      <<
+      /S/JavaScript
+      /JS(fetch("https://www.baidu.com//test33_9-fetch"))
+      >>
+  >>
+>>

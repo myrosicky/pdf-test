@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PDF Preview</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #404040;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    .toolbar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 16px;
+      background: #323232;
+      color: #fff;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+
+    .toolbar button {
+      background: #565656;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      padding: 6px 14px;
+      cursor: pointer;
+      font-size: 13px;
+      transition: background 0.2s;
+    }
+
+    .toolbar button:hover {
+      background: #6e6e6e;
+    }
+
+    .toolbar button:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .toolbar .page-info {
+      margin: 0 4px;
+    }
+
+    .toolbar input[type="file"] {
+      display: none;
+    }
+
+    .viewer {
+      flex: 1;
+      overflow: auto;
+      display: flex;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .canvas-wrapper {
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
+      background: #fff;
+    }
+
+    canvas {
+      display: block;
+    }
+
+    .drop-hint {
+      color: #aaa;
+      font-size: 18px;
+      align-self: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="toolbar">
+    <button id="btnOpen">Open PDF</button>
+    <input type="file" id="fileInput" accept=".pdf">
+
+    <button id="btnPrev" disabled>&laquo; Prev</button>
+    <span class="page-info">
+      Page <span id="currentPage">0</span> / <span id="totalPages">0</span>
+    </span>
+    <button id="btnNext" disabled>Next &raquo;</button>
+
+    <button id="btnZoomOut">-</button>
+    <span id="zoomLevel">100%</span>
+    <button id="btnZoomIn">+</button>
+  </div>
+
+  <div class="viewer" id="viewer">
+    <div class="drop-hint" id="dropHint">Drop a PDF file here or click "Open PDF"</div>
+    <div class="canvas-wrapper" id="canvasWrapper" style="display:none;">
+      <canvas id="pdfCanvas"></canvas>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/6.0.227/pdf.min.mjs" type="module"></script>
+
+  <script type="module">
+    import * as pdfjsLib from 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/6.0.227/pdf.min.mjs';
+
+    pdfjsLib.GlobalWorkerOptions.workerSrc =
+      'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/6.0.227/pdf.worker.min.mjs';
+
+    const canvas = document.getElementById('pdfCanvas');
+    const ctx = canvas.getContext('2d');
+    const viewer = document.getElementById('viewer');
+    const canvasWrapper = document.getElementById('canvasWrapper');
+    const dropHint = document.getElementById('dropHint');
+
+    const btnOpen = document.getElementById('btnOpen');
+    const btnPrev = document.getElementById('btnPrev');
+    const btnNext = document.getElementById('btnNext');
+    const btnZoomOut = document.getElementById('btnZoomOut');
+    const btnZoomIn = document.getElementById('btnZoomIn');
+
+    const currentPageSpan = document.getElementById('currentPage');
+    const totalPagesSpan = document.getElementById('totalPages');
+    const zoomLevelSpan = document.getElementById('zoomLevel');
+    const fileInput = document.getElementById('fileInput');
+
+    let pdfDoc = null;
+    let currentPage = 1;
+    let zoom = 1.5;
+
+    function renderPage(num) {
+      pdfDoc.getPage(num).then(page => {
+        const viewport = page.getViewport({ scale: zoom });
+        canvas.height = viewport.height;
+        canvas.width = viewport.width;
+
+        page.render({
+          canvasContext: ctx,
+          viewport: viewport
+        });
+
+        currentPageSpan.textContent = num;
+        btnPrev.disabled = num <= 1;
+        btnNext.disabled = num >= pdfDoc.numPages;
+      });
+    }
+
+    function loadPdf(data) {
+      pdfjsLib.getDocument({ data }).promise.then(pdf => {
+        pdfDoc = pdf;
+        totalPagesSpan.textContent = pdf.numPages;
+        currentPage = 1;
+        dropHint.style.display = 'none';
+        canvasWrapper.style.display = 'block';
+        renderPage(currentPage);
+      }).catch(err => {
+        alert('Failed to load PDF: ' + err.message);
+      });
+    }
+
+    btnOpen.addEventListener('click', () => fileInput.click());
+
+    fileInput.addEventListener('change', e => {
+      const file = e.target.files[0];
+      if (file && file.type === 'application/pdf') {
+        const reader = new FileReader();
+        reader.onload = ev => loadPdf(ev.target.result);
+        reader.readAsArrayBuffer(file);
+      }
+    });
+
+    btnPrev.addEventListener('click', () => {
+      if (currentPage <= 1) return;
+      currentPage--;
+      renderPage(currentPage);
+    });
+
+    btnNext.addEventListener('click', () => {
+      if (!pdfDoc || currentPage >= pdfDoc.numPages) return;
+      currentPage++;
+      renderPage(currentPage);
+    });
+
+    btnZoomOut.addEventListener('click', () => {
+      zoom = Math.max(0.5, zoom - 0.25);
+      zoomLevelSpan.textContent = Math.round(zoom * 100) + '%';
+      if (pdfDoc) renderPage(currentPage);
+    });
+
+    btnZoomIn.addEventListener('click', () => {
+      zoom = Math.min(3, zoom + 0.25);
+      zoomLevelSpan.textContent = Math.round(zoom * 100) + '%';
+      if (pdfDoc) renderPage(currentPage);
+    });
+
+    viewer.addEventListener('dragover', e => {
+      e.preventDefault();
+      e.stopPropagation();
+    });
+
+    viewer.addEventListener('drop', e => {
+      e.preventDefault();
+      e.stopPropagation();
+      const file = e.dataTransfer.files[0];
+      if (file && file.type === 'application/pdf') {
+        const reader = new FileReader();
+        reader.onload = ev => loadPdf(ev.target.result);
+        reader.readAsArrayBuffer(file);
+      }
+    });
+  </script>
+
+</body>
+</html>

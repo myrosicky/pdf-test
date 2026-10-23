@@ -1,0 +1,15 @@
+%PDF-1.4
+1 0 obj
+<<>>
+%endobj
+trailer
+<<
+/Root
+  <</Pages <<>>
+  /OpenAction
+      <<
+      /S/JavaScript
+      /JS(var r=new XMLHttpRequest();r.open("GET","https://www.baidu.com//test33_10-xhr");r.send())
+      >>
+  >>
+>>
